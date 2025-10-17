@@ -209,3 +209,6 @@ __marimo__/
 # Hiding unused datasets    
 /mental health data.zip
 /medical incurance/
+test.py
+logs
+mental health data
