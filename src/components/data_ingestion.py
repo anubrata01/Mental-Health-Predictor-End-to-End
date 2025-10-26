@@ -7,6 +7,7 @@ import pandas as pd
 # Train test split 
 from sklearn.model_selection import train_test_split
 from src.components.data_transformation import InitiateDataTransformation
+from src.components.model_trainer import ModelTrainer
 
 from dataclasses import dataclass
 
@@ -44,3 +45,5 @@ if __name__=="__main__":
     train_data,test_data = obj.initiate_data_ingesion()
     transform_obj = InitiateDataTransformation()
     train_array,test_array = transform_obj.data_transform_initiate(train_data,test_data)
+    model_trainer=ModelTrainer()
+    print(model_trainer.model_train(train_array))
