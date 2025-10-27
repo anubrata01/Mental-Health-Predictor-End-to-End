@@ -1,11 +1,422 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media and Mental Health Survey</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #7b2ff7, #f120e4);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: floatPattern 20s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      25% {
+        background-position: 50% 100%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      75% {
+        background-position: 50% 0%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes floatPattern {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(50px, 50px);
+      }
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.98);
+      padding: 40px;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 100px rgba(255, 255, 255, 0.1) inset;
+      width: 100%;
+      max-width: 700px;
+      max-height: 90vh;
+      overflow-y: auto;
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #7b2ff7, #f120e4);
+      background-size: 200% 100%;
+      animation: borderShift 3s linear infinite;
+      border-radius: 24px 24px 0 0;
+    }
+
+    @keyframes borderShift {
+      0% {
+        background-position: 0% 0%;
+      }
+      100% {
+        background-position: 200% 0%;
+      }
+    }
+
+    h2 {
+      text-align: center;
+      background: linear-gradient(135deg, #e73c7e, #23a6d5, #7b2ff7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 0 0 30px 0;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+      color: #34495e;
+      font-size: 15px;
+    }
+
+    select,
+    input[type="number"] {
+      width: 100%;
+      padding: 12px 16px;
+      margin: 0;
+      border-radius: 10px;
+      border: 2px solid #e0e0e0;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    select:focus,
+    input:focus {
+      border-color: #0078d7;
+      box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.1);
+      outline: none;
+    }
+
+    select:hover,
+    input:hover {
+      border-color: #bbb;
+    }
+
+    .checkbox-group {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      cursor: pointer;
+      accent-color: #0078d7;
+    }
+
+    .checkbox-item label {
+      margin: 0;
+      font-weight: 500;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 30px;
+      padding: 16px;
+      background: linear-gradient(135deg, #e73c7e 0%, #7b2ff7 50%, #23a6d5 100%);
+      background-size: 200% 100%;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 25px rgba(123, 47, 247, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(123, 47, 247, 0.5);
+      background-position: 100% 0;
+    }
+
+    button:hover::before {
+      left: 100%;
+    }
+
+    button:active {
+      transform: translateY(-1px);
+    }
+
+    .scale-hint {
+      font-size: 13px;
+      color: #7f8c8d;
+      margin-top: 4px;
+    }
+
+    /* Hide scrollbar */
+    .container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .container {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 25px;
+      }
+
+      h2 {
+        font-size: 24px;
+      }
+
+      .checkbox-group {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-    
+  <div class="container">
+    <h2>Social Media and Mental Health Survey</h2>
+    <form action="/predict" method="post">
+
+      <div class="form-group">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" min="10" max="100" required>
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+          <option value="">Select</option>
+          <option value="1">Male</option>
+          <option value="2">Female</option>
+          <option value="3">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="relationship">Relationship Status:</label>
+        <select id="relationship" name="relationship" required>
+          <option value="">Select</option>
+          <option value="1">Single</option>
+          <option value="2">In a Relationship</option>
+          <option value="3">Married</option>
+          <option value="4">Divorced</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="occupation">Occupation Status:</label>
+        <select id="occupation" name="Occupation_Status" required>
+          <option value="">Select</option>
+          <option value="1">Student</option>
+          <option value="2">Employed</option>
+          <option value="3">Unemployed</option>
+          <option value="4">Self-Employed</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="use_social_media">Do you use social media?</label>
+        <select id="use_social_media" name="use_social_media" required>
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="average_time">Average time spent on social media:</label>
+        <select id="average_time" name="average_time_spent" required>
+          <option value="">Select</option>
+          <option value="1">Less than an Hour</option>
+          <option value="2">Between 1 and 2 hours</option>
+          <option value="3">Between 2 and 3 hours</option>
+          <option value="4">Between 3 and 4 hours</option>
+          <option value="5">Between 4 and 5 hours</option>
+          <option value="6">More than 5 hours</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="without_purpose">Using social media without a specific purpose:</label>
+        <input type="number" id="without_purpose" name="using_social_media_without_purpose" min="1" max="5" required>
+        <div class="scale-hint">Scale: 1 (Never) to 5 (Always)</div>
+      </div>
+
+      <div class="form-group">
+        <label for="distracted">Distracted by social media while working:</label>
+        <input type="number" id="distracted" name="distracted_by_social_media" min="1" max="5" required>
+        <div class="scale-hint">Scale: 1 (Never) to 5 (Always)</div>
+      </div>
+
+      <div class="form-group">
+        <label for="restless">Feel restless if haven't used social media:</label>
+        <input type="number" id="restless" name="feel_restless" min="1" max="5" required>
+        <div class="scale-hint">Scale: 1 (Never) to 5 (Always)</div>
+      </div>
+
+      <div class="form-group">
+        <label for="easily_distracted">How easily distracted are you?</label>
+        <input type="number" id="easily_distracted" name="easily_distracted" min="1" max="5" required>
+        <div class="scale-hint">Scale: 1 (Not at all) to 5 (Extremely)</div>
+      </div>
+
+      <div class="form-group">
+        <label for="worries">How much are you bothered by worries?</label>
+        <input type="number" id="worries" name="bothered_by_worries" min="1" max="5" required>
+        <div class="scale-hint">Scale: 1 (Not at all) to 5 (Extremely)</div>
+      </div>
+
+      <div class="form-group">
+        <label for="concentrate">Find it difficult to concentrate on things:</label>
+        <input type="number" id="concentrate" name="difficult_to_concentrate" min="1" max="5" required>
+        <div class="scale-hint">Scale: 1 (Never) to 5 (Always)</div>
+      </div>
+
+      <div class="form-group">
+        <label for="compare">How often do you compare yourself?</label>
+        <input type="number" id="compare" name="compare_yourself" min="1" max="5" required>
+        <div class="scale-hint">Scale: 1 (Never) to 5 (Always)</div>
+      </div>
+
+      <div class="form-group">
+        <label for="validation">Seek validation from social media features:</label>
+        <input type="number" id="validation" name="seek_validation" min="1" max="5" required>
+        <div class="scale-hint">Scale: 1 (Never) to 5 (Always)</div>
+      </div>
+
+      <div class="form-group">
+        <label for="depressed">Feel depressed or down:</label>
+        <input type="number" id="depressed" name="feel_depressed" min="1" max="5" required>
+        <div class="scale-hint">Scale: 1 (Never) to 5 (Always)</div>
+      </div>
+
+      <div class="form-group">
+        <label for="interest">How frequently does your interest fluctuate daily?</label>
+        <input type="number" id="interest" name="interest_fluctuate" min="1" max="5" required>
+        <div class="scale-hint">Scale: 1 (Never) to 5 (Always)</div>
+      </div>
+
+      <div class="form-group">
+        <label for="sleep">Sleep issue:</label>
+        <input type="number" id="sleep" name="sleep_issue" min="1" max="5" required>
+        <div class="scale-hint">Scale: 1 (Never) to 5 (Always)</div>
+      </div>
+
+      <div class="form-group">
+        <label>Which social media platforms do you use?</label>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" id="instagram" name="instagram" value="1">
+            <label for="instagram">Instagram</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="snapchat" name="snapchat" value="1">
+            <label for="snapchat">Snapchat</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="facebook" name="facebook" value="1">
+            <label for="facebook">Facebook</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="twitter" name="twitter" value="1">
+            <label for="twitter">Twitter (X)</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="youtube" name="youtube" value="1">
+            <label for="youtube">YouTube</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="reddit" name="reddit" value="1">
+            <label for="reddit">Reddit</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="whatsapp" name="whatsapp" value="1">
+            <label for="whatsapp">WhatsApp</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="linkedin" name="linkedin" value="1">
+            <label for="linkedin">LinkedIn</label>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit">Submit Survey</button>
+    </form>
+  </div>
 </body>
 </html>
