@@ -6,13 +6,13 @@ from src.exception import CustomException
 from flask import Flask,request,render_template,jsonify
 from src.pipeline.predict_pipeline import CustomData,PredictPipeline
 
-app = Flask(__name__)
+application = Flask(__name__)
 
-@app.route('/')
+@application.route('/')
 def home():
     logging.info("Home page initiated.")
     return render_template("home.html")
-@app.route('/predict',methods=["POST"])
+@application.route('/predict',methods=["POST"])
 def predict():
     logging.info("prediction is called.")
     data = CustomData(
@@ -51,4 +51,4 @@ def predict():
 
 
 if __name__=="__main__":
-    app.run(host='0.0.0.0')
+    application.run(host='0.0.0.0')
