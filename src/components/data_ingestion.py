@@ -24,6 +24,14 @@ class DataIngestion:
         try:
             df = pd.read_csv("D:\Mental Health Predictor\mental health data\social midia and mental health\mental_health_data_processed.csv")
             logging.info("Import data sucessful.")
+            logging.info("drop unnecessary columns.")
+            df = df.drop(columns= ["social_media_count","how do you feel about these comparisons","tiktok","pinterest","discord"])
+            changes = {"nb":"others","unsure":"others","Trans":"others"}
+            df["gender"].replace(changes, inplace=True)
+            logging.info(f"Columns after drop:{df.columns}, shape={df.shape}")
+            for col in df.columns:
+                logging.info(f"Unique values in '{col}': {df[col].unique()}")
+
             logging.info("Train test split intitiated")
             train_data,test_data = train_test_split(df,test_size=0.1,random_state=42)
             os.makedirs(os.path.dirname(self.data_config.raw_path), exist_ok=True)

@@ -233,6 +233,90 @@
       scrollbar-width: none;
     }
 
+    .result-section {
+      margin-top: 30px;
+      padding: 30px;
+      background: linear-gradient(135deg, rgba(231, 60, 126, 0.1), rgba(35, 166, 213, 0.1));
+      border-radius: 16px;
+      border: 2px solid rgba(123, 47, 247, 0.3);
+      display: none;
+      animation: slideIn 0.5s ease;
+    }
+
+    .result-section.show {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .result-category {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #e73c7e, #7b2ff7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      padding: 10px;
+    }
+
+    .result-icon {
+      text-align: center;
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+
+    .result-description {
+      text-align: center;
+      color: #555;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .loading {
+      text-align: center;
+      color: #7b2ff7;
+      font-weight: 600;
+      display: none;
+      margin-top: 15px;
+    }
+
+    .loading.show {
+      display: block;
+    }
+
+    .error-message {
+      background: #fee;
+      border: 2px solid #fcc;
+      color: #c33;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
     @media (max-width: 600px) {
       .container {
         padding: 25px;
@@ -245,13 +329,21 @@
       .checkbox-group {
         grid-template-columns: 1fr;
       }
+
+      .result-category {
+        font-size: 22px;
+      }
+
+      .result-icon {
+        font-size: 50px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Social Media and Mental Health Survey</h2>
-    <form action="/predict" method="post">
+    <form id="surveyForm" action="/predict" method="post">
 
       <div class="form-group">
         <label for="age">Age:</label>
@@ -262,9 +354,9 @@
         <label for="gender">Gender:</label>
         <select id="gender" name="gender" required>
           <option value="">Select</option>
-          <option value="1">Male</option>
-          <option value="2">Female</option>
-          <option value="3">Other</option>
+          <option value="m">Male</option>
+          <option value="f">Female</option>
+          <option value="other">Other</option>
         </select>
       </div>
 
@@ -272,10 +364,10 @@
         <label for="relationship">Relationship Status:</label>
         <select id="relationship" name="relationship" required>
           <option value="">Select</option>
-          <option value="1">Single</option>
-          <option value="2">In a Relationship</option>
-          <option value="3">Married</option>
-          <option value="4">Divorced</option>
+          <option value="Single">Single</option>
+          <option value="In a relationship">In a Relationship</option>
+          <option value="Married">Married</option>
+          <option value="Divorced">Divorced</option>
         </select>
       </div>
 
@@ -283,18 +375,18 @@
         <label for="occupation">Occupation Status:</label>
         <select id="occupation" name="Occupation_Status" required>
           <option value="">Select</option>
-          <option value="1">Student</option>
-          <option value="2">Employed</option>
-          <option value="3">Unemployed</option>
-          <option value="4">Self-Employed</option>
+          <option value="University Student">University Student</option>
+          <option value="School Student">School Student</option>
+          <option value="Salaried Worker">Salaried Worker</option>
+          <option value="Retired">Retired</option>
         </select>
       </div>
 
       <div class="form-group">
         <label for="use_social_media">Do you use social media?</label>
         <select id="use_social_media" name="use_social_media" required>
-          <option value="1">Yes</option>
-          <option value="0">No</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
         </select>
       </div>
 
@@ -302,12 +394,12 @@
         <label for="average_time">Average time spent on social media:</label>
         <select id="average_time" name="average_time_spent" required>
           <option value="">Select</option>
-          <option value="1">Less than an Hour</option>
-          <option value="2">Between 1 and 2 hours</option>
-          <option value="3">Between 2 and 3 hours</option>
-          <option value="4">Between 3 and 4 hours</option>
-          <option value="5">Between 4 and 5 hours</option>
-          <option value="6">More than 5 hours</option>
+          <option value="Less than an Hour">Less than an Hour</option>
+          <option value="Between 1 and 2 hours">Between 1 and 2 hours</option>
+          <option value="Between 2 and 3 hours">Between 2 and 3 hours</option>
+          <option value="Between 3 and 4 hours">Between 3 and 4 hours</option>
+          <option value="Between 4 and 5 hours">Between 4 and 5 hours</option>
+          <option value="More than 5 hours">More than 5 hours</option>
         </select>
       </div>
 
@@ -381,42 +473,139 @@
         <label>Which social media platforms do you use?</label>
         <div class="checkbox-group">
           <div class="checkbox-item">
+            <input type="hidden" name="instagram" value="0">
             <input type="checkbox" id="instagram" name="instagram" value="1">
             <label for="instagram">Instagram</label>
           </div>
           <div class="checkbox-item">
+            <input type="hidden" name="snapchat" value="0">
             <input type="checkbox" id="snapchat" name="snapchat" value="1">
             <label for="snapchat">Snapchat</label>
           </div>
           <div class="checkbox-item">
+            <input type="hidden" name="facebook" value="0">
             <input type="checkbox" id="facebook" name="facebook" value="1">
             <label for="facebook">Facebook</label>
           </div>
           <div class="checkbox-item">
+            <input type="hidden" name="twitter" value="0">
             <input type="checkbox" id="twitter" name="twitter" value="1">
             <label for="twitter">Twitter (X)</label>
           </div>
           <div class="checkbox-item">
+            <input type="hidden" name="youtube" value="0">
             <input type="checkbox" id="youtube" name="youtube" value="1">
             <label for="youtube">YouTube</label>
           </div>
           <div class="checkbox-item">
+            <input type="hidden" name="reddit" value="0">
             <input type="checkbox" id="reddit" name="reddit" value="1">
             <label for="reddit">Reddit</label>
           </div>
           <div class="checkbox-item">
+            <input type="hidden" name="whatsapp" value="0">
             <input type="checkbox" id="whatsapp" name="whatsapp" value="1">
             <label for="whatsapp">WhatsApp</label>
           </div>
           <div class="checkbox-item">
+            <input type="hidden" name="linkedin" value="0">
             <input type="checkbox" id="linkedin" name="linkedin" value="1">
             <label for="linkedin">LinkedIn</label>
           </div>
         </div>
       </div>
 
-      <button type="submit">Submit Survey</button>
+      <button type="submit">Submit</button>
+
+      <div class="loading" id="loading">
+        🔄 Analyzing your responses...
+      </div>
+      
+      <div class="error-message" id="errorMessage"></div>
+      
+      <div class="result-section" id="resultSection">
+        <div class="result-icon" id="resultIcon"></div>
+        <div class="result-title">Your Social Media Usage Profile</div>
+        <div class="result-category" id="resultCategory"></div>
+        <div class="result-description" id="resultDescription"></div>
+      </div>
     </form>
   </div>
+
+  <script>
+    const form = document.getElementById('surveyForm');
+    const loading = document.getElementById('loading');
+    const errorMessage = document.getElementById('errorMessage');
+    const resultSection = document.getElementById('resultSection');
+    const resultIcon = document.getElementById('resultIcon');
+    const resultCategory = document.getElementById('resultCategory');
+    const resultDescription = document.getElementById('resultDescription');
+
+    const categoryInfo = {
+      'Mature Light Users': {
+        icon: '✅',
+        description: 'You demonstrate healthy social media habits with balanced usage patterns. You maintain good control over your social media consumption and show minimal signs of problematic usage.'
+      },
+      'Highly Addicted Youth': {
+        icon: '⚠️',
+        description: 'Your responses indicate high levels of social media dependency. Consider taking steps to reduce usage time, set boundaries, and seek support if social media is negatively impacting your mental health or daily life.'
+      },
+      'Moderate Student Users': {
+        icon: '📊',
+        description: 'You show moderate social media usage patterns typical of students. While you use social media regularly, you maintain reasonable control. Consider monitoring your usage to prevent it from escalating.'
+      }
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Hide previous results and errors
+      resultSection.classList.remove('show');
+      errorMessage.classList.remove('show');
+      loading.classList.add('show');
+
+      // Collect form data (use FormData to send as form data, not JSON)
+      const formData = new FormData(form);
+      console.log(formData)
+      try {
+        const response = await fetch('/predict', {
+          method: 'POST',
+          body: formData  // Send as form data to match your Flask request.form.get()
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to get prediction from server');
+        }
+
+        const result = await response.json();
+        
+        // Display result
+        loading.classList.remove('show');
+        
+        const category = result.prediction;
+        const info = categoryInfo[category];
+        
+        if (info) {
+          resultIcon.textContent = info.icon;
+          resultCategory.textContent = category;
+          resultDescription.textContent = info.description;
+          resultSection.classList.add('show');
+          
+          // Smooth scroll to results
+          setTimeout(() => {
+            resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 100);
+        } else {
+          throw new Error('Unknown category: ' + category);
+        }
+
+      } catch (error) {
+        loading.classList.remove('show');
+        errorMessage.textContent = '❌ Error: ' + error.message;
+        errorMessage.classList.add('show');
+        console.error('Prediction error:', error);
+      }
+    });
+  </script>
 </body>
 </html>
