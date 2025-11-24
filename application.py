@@ -48,7 +48,7 @@ def predict():
     prediction = predict_pipeline.predict(df)
     logging.info(f"prediction:{prediction}")
     return jsonify({'prediction': prediction})
-
+#lol
 
 if __name__=="__main__":
     application.run(host='0.0.0.0')
