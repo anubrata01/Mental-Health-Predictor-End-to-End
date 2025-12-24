@@ -19,9 +19,12 @@ Placeholder	    Meaning
 '''
 
 logging.basicConfig(
-    filename=log_file_path,
+    level=logging.INFO,
     format="[%(asctime)s] %(lineno)d %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO
+    handlers=[
+        logging.FileHandler(log_file_path),  # Logs to file
+        logging.StreamHandler()              # Logs to console (THIS WAS MISSING!)
+    ]
 )
 '''
 level in logging.basicConfig() controls which types of messages get recorded.
